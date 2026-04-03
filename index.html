@@ -2,128 +2,60 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>BrusselsExplorer - Ontdek Brussel</title>
-    
-    <!-- CSS bestand -->
-    <link rel="stylesheet" href="css/style.css">
-    
-    <!-- Font Awesome voor iconen -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Leaflet voor de kaart (OpenStreetMap) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrusselsExplorer - Stripmuren</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
-    <!-- Header met navigatie -->
-    <header>
-        <nav class="navbar">
-            <div class="logo">
-                <i class="fas fa-map-marker-alt"></i>
-                <h1>BrusselsExplorer</h1>
-            </div>
-            <div class="nav-controls">
-                <button id="viewToggle" class="view-toggle-btn">
-                    <i class="fas fa-table"></i> Lijstweergave
-                </button>
-                <button id="themeToggle" class="theme-btn">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
-        </nav>
-    </header>
 
-    <main>
-        <!-- ZOEK- EN FILTER SECTIE -->
-        <section class="controls">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Zoek locaties (min. 2 tekens)...">
-                <small id="searchValidation" class="validation-message"></small>
-            </div>
-            
-            <div class="filters">
-                <select id="categoryFilter">
-                    <option value="all">Alle categorieën</option>
-                    <option value="culture">🏛️ Cultuur & Musea</option>
-                    <option value="nature">🌳 Natuur & Parken</option>
-                    <option value="history">🏰 Historisch</option>
-                    <option value="art">🎨 Kunst</option>
-                </select>
-                
-                <select id="sortSelect">
-                    <option value="name">Sorteer op naam (A-Z)</option>
-                    <option value="name-desc">Sorteer op naam (Z-A)</option>
-                    <option value="type">Sorteer op type</option>
-                </select>
-            </div>
-            
-            <div class="action-buttons">
-                <button id="loadDataBtn" class="btn-primary">
-                    <i class="fas fa-sync-alt"></i> Laad locaties
-                </button>
-                <button id="showFavoritesBtn" class="btn-secondary">
-                    <i class="fas fa-heart"></i> Favorieten
-                </button>
-            </div>
-        </section>
+<header>
+    <h1>BrusselsExplorer</h1>
+    <p>Stripmuren in Brussel - Ontdek de stripkunst in de stad</p>
+</header>
 
-        <!-- FOUTMELDING CONTAINER -->
-        <div id="errorMessage" class="error-message" style="display: none;"></div>
+<div class="container">
+    <div class="knoppen">
+        <button id="laadKnop">Laad locaties</button>
+        <button id="favKnop">Favorieten</button>
+        <button id="resetKnop">Reset filters</button>
+        <button id="themaKnop">Donker thema</button>
+        <button onclick="location.href='fotos.html'">Bekijk foto's</button>
+    </div>
 
-        <!-- LOADING INDICATOR -->
-        <div id="loadingIndicator" class="loading" style="display: none;">
-            <i class="fas fa-spinner fa-spin"></i> Bezig met laden van data...
-        </div>
+    <div class="zoek-filter">
+        <input type="text" id="zoekInput" placeholder="Zoek op naam of tekenaar...">
+        <select id="filterSelect">
+            <option value="all">Alle gemeenten</option>
+            <option value="Brussel">Brussel</option>
+            <option value="Laken">Laken</option>
+            <option value="Haren">Haren</option>
+        </select>
+        <select id="sorteerSelect">
+            <option value="naam">Sorteer op naam</option>
+            <option value="jaar">Sorteer op jaar</option>
+        </select>
+    </div>
 
-        <!-- STATISTIEKEN -->
-        <div class="stats">
-            <p id="resultCount">0 locaties gevonden</p>
-            <div class="view-stats">
-                <span id="currentViewBadge" class="badge">📍 Kaartweergave</span>
-                <button id="resetFiltersBtn" class="btn-outline">
-                    <i class="fas fa-undo-alt"></i> Reset filters
-                </button>
-            </div>
-        </div>
+    <div id="map"></div>
 
-        <!-- DATA WEERGAVE - TABELWEERGAVE (6 kolommen) -->
-        <div id="tableView" class="table-container" style="display: none;">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Naam</th>
-                        <th>Categorie</th>
-                        <th>Type</th>
-                        <th>Adres</th>
-                        <th>Acties</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr>
-                        <td colspan="6" class="text-center">Geen data geladen. Klik op "Laad locaties".</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="tabel-container">
+        <table>
+            <thead>
+                <tr><th>#</th><th>Naam</th><th>Adres</th><th>Tekenaar</th><th>Jaar</th><th>Favoriet</th></tr>
+            </thead>
+            <tbody id="tabelBody"></tbody>
+        </table>
+    </div>
 
-        <!-- DATA WEERGAVE - KAARTWEERGAVE -->
-        <div id="mapView" class="map-container">
-            <div id="map" class="leaflet-map"></div>
-        </div>
+    <div class="aantal" id="aantalInfo">0 locaties geladen</div>
+</div>
 
-        <!-- DATA WEERGAVE - GRIDWEERGAVE (voor als de kaart niet laadt) -->
-        <div id="locationsGrid" class="locations-grid"></div>
-    </main>
+<footer>
+    <p>Data van OpenData Brussels - Parcours BD (Stripmuren)</p>
+</footer>
 
-    <footer>
-        <p>Data afkomstig van <a href="https://opendata.brussels.be" target="_blank" rel="noopener noreferrer">OpenData Brussels</a></p>
-        <p>© 2024 BrusselsExplorer | Ontdek de mooiste plekken van Brussel</p>
-    </footer>
-
-    <!-- JavaScript module -->
-    <script type="module" src="js/app.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
