@@ -12,15 +12,14 @@
 
 <header>
     <h1>BrusselsExplorer</h1>
-    <p>Stripmuren in Brussel - Ontdek de stripkunst in de stad</p>
+    <p>Stripmuren in Brussel</p>
 </header>
 
 <div class="container">
     <div class="knoppen">
         <button id="laadKnop">Laad locaties</button>
         <button id="favKnop">Favorieten</button>
-        <button id="resetKnop">Reset filters</button>
-        <button id="themaKnop">Donker thema</button>
+        <button id="resetKnop">Reset</button>
         <button onclick="location.href='fotos.html'">Bekijk foto's</button>
     </div>
 
@@ -30,7 +29,6 @@
             <option value="all">Alle gemeenten</option>
             <option value="Brussel">Brussel</option>
             <option value="Laken">Laken</option>
-            <option value="Haren">Haren</option>
         </select>
         <select id="sorteerSelect">
             <option value="naam">Sorteer op naam</option>
@@ -43,17 +41,17 @@
     <div class="tabel-container">
         <table>
             <thead>
-                <tr><th>#</th><th>Naam</th><th>Adres</th><th>Tekenaar</th><th>Jaar</th><th>Favoriet</th></tr>
+                <tr><th>#</th><th>Naam</th><th>Adres</th><th>Tekenaar</th><th>Jaar</th><th>Fav</th></tr>
             </thead>
             <tbody id="tabelBody"></tbody>
         </table>
     </div>
 
-    <div class="aantal" id="aantalInfo">0 locaties geladen</div>
+    <div class="aantal" id="aantalInfo">0 locaties</div>
 </div>
 
 <footer>
-    <p>Data van OpenData Brussels - Parcours BD (Stripmuren)</p>
+    <p>Data: OpenData Brussels - Stripmuren</p>
 </footer>
 
 <script src="script.js"></script>
